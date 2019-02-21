@@ -1,0 +1,10 @@
+igw-001.cloud.l.nw.rubykaigi.org:
+  properties:
+    attributes:
+      desired_hostname: igw-001
+      bird:
+        id: 10.25.128.210
+
+    run_list:
+      - roles/base/default.rb
+      - roles/igw-router/default.rb

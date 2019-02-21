@@ -1,0 +1,17 @@
+#!/bin/bash -xe
+
+sudo -u postgres psql <<-'EOF'
+create role "zabbix-server" login;
+create database zabbix with owner = "zabbix-server";
+
+\c zabbix
+create role http login;
+grant all on all tables in schema public to http;
+alter default privileges for role "zabbix-server" in schema public grant all on tables to "http";
+EOF
+
+sudo -u zabbix-server psql zabbix < /usr/share/zabbix-server/postgresql/schema.sql
+sudo -u zabbix-server psql zabbix < /usr/share/zabbix-server/postgresql/images.sql
+sudo -u zabbix-server psql zabbix < /usr/share/zabbix-server/postgresql/data.sql
+
+touch /mnt/vol/initialized.zabbix-server

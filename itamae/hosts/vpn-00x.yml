@@ -1,0 +1,11 @@
+vpn-001.cloud.l.nw.rubykaigi.org:
+  properties:
+    attributes:
+      desired_hostname: vpn-001
+      bird:
+        id: 10.25.128.202
+
+    run_list:
+      - hosts/vpn-001.rb
+      - roles/base/default.rb
+      - roles/vpn-router/default.rb

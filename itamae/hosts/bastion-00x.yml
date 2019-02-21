@@ -1,0 +1,7 @@
+bastion.s.nw.rubykaigi.org:
+  properties:
+    attributes:
+      desired_hostname: bastion-001
+    run_list:
+      - roles/base/default.rb
+      - roles/rproxy/default.rb

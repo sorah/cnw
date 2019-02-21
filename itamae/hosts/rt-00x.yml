@@ -1,0 +1,10 @@
+rt-001.cloud.l.nw.rubykaigi.org:
+  properties:
+    attributes:
+      desired_hostname: rt-001
+      bird:
+        id: 10.25.128.254
+
+    run_list:
+      - roles/base/default.rb
+      - roles/router/default.rb

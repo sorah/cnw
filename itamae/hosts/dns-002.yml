@@ -1,0 +1,14 @@
+dns-002.cloud.l.nw.rubykaigi.org:
+  properties:
+    attributes:
+      desired_hostname: dns-002
+      dns_cache:
+        log_queries: true
+        upstream:
+          - '210.188.224.10'
+          - '210.188.224.11'
+
+    run_list:
+      - roles/base/default.rb
+      - roles/internal-dns/default.rb
+      - roles/dns-cache/default.rb

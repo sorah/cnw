@@ -1,0 +1,6 @@
+Cmnd_Alias CONNTRACK_E = /usr/bin/conntrack, \
+                         /usr/bin/conntrack -E -o extended
+Defaults!CONNTRACK_E !requiretty
+
+ALL ALL = (root) NOPASSWD: CONNTRACK_E
+
