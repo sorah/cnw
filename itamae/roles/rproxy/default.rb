@@ -1,5 +1,5 @@
-include_recipe '../../roles/base/default.rb'
-include_recipe '../../cookbooks/nginx/default.rb'
+  include_role 'base'
+include_cookbook 'nginx'
 
 %w(
   default

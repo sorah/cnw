@@ -7,10 +7,10 @@ node.reverse_merge!(
   },
 )
 
-include_recipe '../../cookbooks/mnt-vol/default.rb'
+include_cookbook 'mnt-vol'
 
-include_recipe '../../cookbooks/fluentd/default.rb'
-include_recipe '../../cookbooks/nftables/default.rb'
+include_cookbook 'fluentd'
+include_cookbook 'nftables'
 
 directory node[:syslog].fetch(:root) do
   owner 'fluentd'

@@ -1,4 +1,4 @@
-include_recipe '../../cookbooks/nsd/default.rb'
+include_cookbook 'nsd'
 
 node.reverse_merge!(
   internal_dns: {

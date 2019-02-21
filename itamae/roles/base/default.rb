@@ -29,10 +29,10 @@ end
 package "sudo" do
 end
 
-include_recipe '../../cookbooks/locale/default.rb'
-include_recipe '../../cookbooks/no-icmp-redirect/default.rb'
+include_cookbook 'locale'
+include_cookbook 'no-icmp-redirect'
 
-include_recipe '../../cookbooks/iperf3/default.rb'
+include_cookbook 'iperf3'
 
 package "bind-tools" do
 end
@@ -96,7 +96,7 @@ end
 package "btrfs-progs" do
 end
 
-include_recipe '../../cookbooks/op-user/default.rb'
+include_cookbook 'op-user'
 
 execute "install yaourt" do
   command "rm -rf /tmp/mitamae-install-yaourt; " +
@@ -116,9 +116,9 @@ execute "install yaourt" do
   not_if "test -x /usr/bin/yaourt"
 end
 
-include_recipe '../../cookbooks/arch-wanko-cc/default.rb'
+include_cookbook 'arch-wanko-cc'
 
-include_recipe '../../cookbooks/sshd/default.rb'
+include_cookbook 'sshd'
 
 template "/etc/systemd/timesyncd.conf" do
   owner 'root'
@@ -134,7 +134,7 @@ end
 
 if node[:base][:zabbix_agent]
   # TODO: zabbix_agent
-  include_recipe '../../cookbooks/zabbix-agent/default.rb'
+  include_cookbook 'zabbix-agent'
 end
 
 file '/root/.ssh/authorized_keys' do

@@ -24,11 +24,11 @@ node.reverse_merge!(
   end
 end
 
-include_recipe '../../cookbooks/mnt-vol/default.rb'
-include_recipe '../../cookbooks/nftables/default.rb'
-include_recipe '../../cookbooks/unbound/default.rb'
-include_recipe '../../cookbooks/zabbix-userparameter-unbound/default.rb'
-include_recipe '../../cookbooks/zabbix-userparameter-autoping/default.rb'
+include_cookbook 'mnt-vol'
+include_cookbook 'nftables'
+include_cookbook 'unbound'
+include_cookbook 'zabbix-userparameter-unbound'
+include_cookbook 'zabbix-userparameter-autoping'
 
 template '/etc/nftables.conf' do
   owner 'root'

@@ -12,17 +12,17 @@ node.reverse_merge!(
 )
 
 
-include_recipe '../../cookbooks/rp-filter/default.rb'
-include_recipe '../../cookbooks/linux-ecmp/default.rb'
-include_recipe '../../cookbooks/conntrack/default.rb'
+include_cookbook 'rp-filter'
+include_cookbook 'linux-ecmp'
+include_cookbook 'conntrack'
 
 ##
 
-include_recipe '../../cookbooks/zabbix-userparameter-autoping/default.rb'
+include_cookbook 'zabbix-userparameter-autoping'
 
 ##
 
-include_recipe '../../cookbooks/nftables/default.rb'
+include_cookbook 'nftables'
 
 template '/etc/nftables.conf' do
   owner 'root'
@@ -33,7 +33,7 @@ end
 
 ##
 
-include_recipe '../../cookbooks/bird/default.rb'
+include_cookbook 'bird'
 
 template '/etc/bird.conf.d/default.conf' do
   owner 'root'
@@ -44,7 +44,7 @@ end
 
 ##
 
-include_recipe '../../cookbooks/fluentd/default.rb'
+include_cookbook 'fluentd'
 gem_package "fluent-plugin-nfct-parser"
 
 template '/etc/fluent/fluent.conf' do

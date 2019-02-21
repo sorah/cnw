@@ -14,14 +14,14 @@ node.reverse_merge!(
   }
 )
 
-include_recipe '../../cookbooks/nftables/default.rb'
-include_recipe '../../cookbooks/bird/default.rb'
+include_cookbook 'nftables'
+include_cookbook 'bird'
 
-include_recipe '../../cookbooks/rp-filter/default.rb'
-include_recipe '../../cookbooks/linux-ecmp/default.rb'
-include_recipe '../../cookbooks/conntrack/default.rb'
+include_cookbook 'rp-filter'
+include_cookbook 'linux-ecmp'
+include_cookbook 'conntrack'
 
-include_recipe '../../cookbooks/zabbix-userparameter-autoping/default.rb'
+include_cookbook 'zabbix-userparameter-autoping'
 
 template '/etc/nftables.conf' do
   owner 'root'

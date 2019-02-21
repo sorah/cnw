@@ -5,12 +5,12 @@ node.reverse_merge!(
   },
 )
 
-include_recipe '../../roles/base/default.rb'
+  include_role 'base'
 
-include_recipe '../../cookbooks/mnt-vol/default.rb'
+include_cookbook 'mnt-vol'
 
-include_recipe '../../cookbooks/kea/default.rb'
-include_recipe '../../cookbooks/zabbix-userparameter-kea/default.rb'
+include_cookbook 'kea'
+include_cookbook 'zabbix-userparameter-kea'
 
 conf = {
   Dhcp4: {

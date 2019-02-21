@@ -4,17 +4,17 @@ node.reverse_merge!(
   },
 )
 
-include_recipe '../../cookbooks/mnt-vol/default.rb'
+include_cookbook 'mnt-vol'
 
 ##
 
-include_recipe '../../cookbooks/nginx/default.rb'
-include_recipe '../../cookbooks/php-fpm/default.rb'
+include_cookbook 'nginx'
+include_cookbook 'php-fpm'
 
 ##
 
-include_recipe '../../cookbooks/postgresql-server/default.rb'
-include_recipe '../../cookbooks/zabbix-server/default.rb'
+include_cookbook 'postgresql-server'
+include_cookbook 'zabbix-server'
 
 template "#{node[:postgresql_server][:root]}/data/pg_hba.conf" do
   source 'templates/var/lib/postgres/data/pg_hba.conf'
@@ -45,7 +45,7 @@ end
 
 ##
 
-include_recipe '../../cookbooks/grafana/default.rb'
+include_cookbook 'grafana'
 
 template '/etc/grafana.ini' do
   owner 'root'
@@ -90,7 +90,7 @@ end
 
 ##
 
-include_recipe '../../cookbooks/zabbix-userparameter-autoping/default.rb'
+include_cookbook 'zabbix-userparameter-autoping'
 
 ##
 
