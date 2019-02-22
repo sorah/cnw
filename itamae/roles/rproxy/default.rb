@@ -1,4 +1,4 @@
-  include_role 'base'
+include_role 'base'
 include_cookbook 'nginx'
 
 %w(
