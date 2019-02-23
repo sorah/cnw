@@ -34,8 +34,8 @@ lan	10.25.0.0/19	10.25.11.1	ap-hal-01		de:ad:be:ef:88:88
 EOF
 
 node[:hosts_data] = host_lines.lines.
-  map { |l| dc, network, cidr, ip, name, iface, mac = l.chomp.split(?\t, 6);{dc: dc, network: network, cidr: cidr, ip: ip, name: name, mac: (mac && !mac.empty? && mac != '#N/A') ? mac : nil, iface: (iface && !iface.empty?) ? iface : nil} }.
-  reject { |_| _[:ip].empty? }.
+  map { |l| dc, network, cidr, ip, name, iface, mac = l.chomp.split(?\t, 7);{dc: dc, network: network, cidr: cidr, ip: ip, name: name, mac: (mac && !mac.empty? && mac != '#N/A') ? mac : nil, iface: (iface && !iface.empty?) ? iface : nil} }.
+  reject { |_| _[:ip].nil? || _[:ip].empty? }.
   group_by { |_| [_[:dc], _[:name]] }.
   map { |_, ips| [ips[0].merge(primary: true), ips[1..-1]].flatten }.
   flatten
