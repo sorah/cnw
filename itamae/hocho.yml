@@ -16,6 +16,9 @@ property_providers:
       properties:
         nopasswd_sudo: true
         preferred_driver: mitamae
+        alternate_ssh_options:
+          port: 22
+          user: root
 initializers:
   - site.rb
 driver_options:
