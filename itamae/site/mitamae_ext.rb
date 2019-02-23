@@ -1,5 +1,5 @@
 MItamae::RecipeContext.class_eval do
-  ROLES_DIR = File.expand_path("../roles", __FILE__)
+  ROLES_DIR = File.expand_path("../../cnw/roles", __FILE__)
   def include_role(name)
     names = name.split("::")
 
@@ -23,7 +23,7 @@ MItamae::RecipeContext.class_eval do
     raise "Role #{name} couldn't found"
   end
 
-  COOKBOOKS_DIR = File.expand_path("../cookbooks", __FILE__)
+  COOKBOOKS_DIR = File.expand_path("../../cnw/cookbooks", __FILE__)
   def include_cookbook(name)
     names = name.split("::")
 
@@ -31,8 +31,8 @@ MItamae::RecipeContext.class_eval do
     names[-1] += ".rb"
 
     common_candidates = [
-      File.join(node[:basedir], 'roles', *names),
-      File.join(ROLES_DIR, *names),
+      File.join(node[:basedir], 'cookbooks', *names),
+      File.join(COOKBOOKS_DIR, *names),
     ]
     candidates = [
       *common_candidates,
