@@ -13,6 +13,9 @@ if node[:desired_hostname] && node[:desired_hostname] != node[:hostname]
   node[:hostname] = node[:desired_hostname]
 end
 
+include_cookbook 'arch-wanko-cc'
+include_cookbook 'arch-sorah-jp'
+
 directory "/usr/share/cnw" do
   owner 'root'
   group 'root'
@@ -25,100 +28,48 @@ directory "/usr/share/cnw/scripts" do
   mode  '0755'
 end
 
-
-package "sudo" do
-end
-
 include_cookbook 'locale'
 include_cookbook 'no-icmp-redirect'
 
+include_cookbook 'sshd'
+
+%w(
+  sudo
+  bind-tools
+  sysstat
+  dstat
+  vim
+  mtr
+  tcpdump
+  gnu-netcat
+  socat
+  traceroute
+  htop
+  jq
+  git
+  ruby
+  btrfs-progs
+).each do |_|
+  package _
+end
+
 include_cookbook 'iperf3'
 
-package "bind-tools" do
-end
-
-package "sysstat" do
-end
-
-package "dstat" do
-end
-
-package "vim" do
-end
-
-package "mtr" do
-end
-
-package "tcpdump" do
-end
-
-package "gnu-netcat" do
-end
-
-package "socat" do
-end
-
-package "traceroute" do
-end
-
-package "htop" do
-end
-
-package "jq" do
-end
-
-package "git" do
-end
-
-package "ruby" do
-end
 remote_file '/etc/gemrc' do 
   owner 'root'
   group 'root'
   mode  '0644'
 end
 
-if node[:multilib]
-  package "gcc-multilib" do
-  end
-else
-  package "gcc" do
-  end
-end
-
-%w(autoconf automake binutils bison fakeroot file findutils
-flex gawk gettext grep groff gzip libtool m4 make pacman
-patch pkg-config sed sudo texinfo util-linux which).each do |pkg|
-  package pkg do
-  end
-end
-
-package "btrfs-progs" do
-end
+#if node[:multilib]
+#  package "gcc-multilib" do
+#  end
+#else
+#  package "gcc" do
+#  end
+#end
 
 include_cookbook 'op-user'
-
-execute "install yaourt" do
-  command "rm -rf /tmp/mitamae-install-yaourt; " +
-          "mkdir /tmp/mitamae-install-yaourt && " +
-          "cd /tmp/mitamae-install-yaourt &&" +
-          "git clone https://aur.archlinux.org/package-query.git && " +
-          "chgrp #{node[:op_user].fetch(:name)} package-query && chmod 775 package-query && " +
-          "cd package-query && " +
-          "su #{node[:op_user].fetch(:name)} -s /bin/bash -c 'makepkg --noconfirm -si' && " +
-          "cd .. && " +
-          "git clone https://aur.archlinux.org/yaourt.git && " +
-          "chgrp #{node[:op_user].fetch(:name)} yaourt && chmod 775 yaourt && " +
-          "cd yaourt && " +
-          "su #{node[:op_user].fetch(:name)} -s /bin/bash -c 'makepkg --noconfirm -si' && " +
-          "cd /tmp; rm -rf /tmp/mitamae-install-yaourt"
-
-  not_if "test -x /usr/bin/yaourt"
-end
-
-include_cookbook 'arch-wanko-cc'
-
-include_cookbook 'sshd'
 
 template "/etc/systemd/timesyncd.conf" do
   owner 'root'
@@ -133,7 +84,6 @@ unless node[:in_container]
 end
 
 if node[:base][:zabbix_agent]
-  # TODO: zabbix_agent
   include_cookbook 'zabbix-agent'
 end
 
