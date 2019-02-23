@@ -26,13 +26,6 @@ driver_options:
       - |
         set -x
         set -e
-        if ! grep -q aur-eagletmt /etc/pacman.conf; then
-          curl -Ssf https://wanko.cc/gpg-key.txt | pacman-key -a -
-          pacman-key --lsign-key C48DBD97
-          echo >> /etc/pacman.conf
-          echo "[aur-eagletmt]" >> /etc/pacman.conf
-          echo "SigLevel = Required" >> /etc/pacman.conf
-          echo 'Server = http://arch.wanko.cc/$repo/os/$arch' >> /etc/pacman.conf
         if ! grep -q aur-sorah /etc/pacman.conf; then
           curl -Ssf https://sorah.jp/packaging/arch/17C611F16D92677398E0ADF51AD43CA09D82C624.txt | pacman-key -a -
           pacman-key --lsign-key 17C611F16D92677398E0ADF51AD43CA09D82C624
