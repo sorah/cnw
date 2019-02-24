@@ -24,6 +24,8 @@ node.reverse_merge!(
   end
 end
 
+include_role 'base'
+include_cookbook 'systemd-resolved'
 include_cookbook 'mnt-vol'
 include_cookbook 'nftables'
 include_cookbook 'unbound'
