@@ -27,16 +27,18 @@ end
 include_role 'base'
 include_cookbook 'systemd-resolved'
 include_cookbook 'mnt-vol'
-include_cookbook 'nftables'
 include_cookbook 'unbound'
 include_cookbook 'zabbix-userparameter-unbound'
 include_cookbook 'zabbix-userparameter-autoping'
 
-template '/etc/nftables.conf' do
-  owner 'root'
-  group 'wheel'
-  mode  '0640'
-  notifies :run, 'execute[nft -f /etc/nftables.conf]'
+if node[:use_nftables]
+  include_cookbook 'nftables'
+  template '/etc/nftables.conf' do
+    owner 'root'
+    group 'wheel'
+    mode  '0640'
+    notifies :run, 'execute[nft -f /etc/nftables.conf]'
+  end
 end
 
 directory '/mnt/vol/unbound-log' do

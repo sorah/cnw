@@ -9,7 +9,9 @@ node[:site_domain] = 'nw.test.invalid'
 node[:site_rdomain] = '25.10.in-addr.arpa'
 node[:site_cidr] = '10.25.0.0/16'
 # node[:site_cidr6] = ''
-#
+
+node[:use_nftables] = true
+
 node[:wlc_host] = "wlc-001.venue.l.#{node.fetch(:site_domain)}"
 node[:zabbix_host] = "zabbix-001.cloud.l.#{node.fetch(:site_domain)}"
 node[:syslog_host] = "syslog-001.cloud.l.#{node.fetch(:site_domain)}"
