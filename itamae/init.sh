@@ -9,4 +9,5 @@ ln -s ../cnw/itamae/site site
 cp ../cnw/itamae/vars.rb vars.rb
 cp ../cnw/itamae/hocho.yml hocho.yml
 cp ../cnw/itamae/Gemfile Gemfile
+echo 'base: ./secrets' > .itamae-secrets.yml
 echo '/secrets/keys/' >> .gitignore
