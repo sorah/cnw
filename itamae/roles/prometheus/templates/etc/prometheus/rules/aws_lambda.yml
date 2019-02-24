@@ -1,0 +1,20 @@
+groups:
+  - name: lambda_failures
+    rules:
+      - alert: AwsLambdaFailures
+        expr: 'aws_lambda_errors_sum offset 6m > 0'
+        for: 12m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.function_name}}: Lambda function failing 12m+ ({{$value}})"
+
+  - name: lambda_throttles
+    rules:
+      - alert: AwsLambdaThrottled
+        expr: 'aws_lambda_throttles_sum offset 6m > 0'
+        for: 6m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.function_name}}: Lambda function throttled 6m+ ({{$value}})"

@@ -2,7 +2,7 @@ node.reverse_merge!(
   multilib: run_command("grep '^\\[multilib\\]' /etc/pacman.conf", error: false).exit_status == 0,
   in_container: run_command("systemd-detect-virt --container", error: false).exit_status == 0,
   base: {
-    zabbix_agent: true,
+    zabbix_agent: false,
   },
 )
 
@@ -83,9 +83,9 @@ unless node[:in_container]
   end
 end
 
-if node[:base][:zabbix_agent]
-  include_cookbook 'zabbix-agent'
-end
+include_cookbook 'prometheus-node-exporter'
+include_cookbook 'prometheus-exporter-proxy'
+include_cookbook 'zabbix-agent' if node[:base][:zabbix_agent]
 
 file '/root/.ssh/authorized_keys' do
   action :delete

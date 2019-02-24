@@ -1,0 +1,10 @@
+groups:
+  - name: haproxy_down
+    rules:
+      - alert: HaproxyBackendDown
+        expr: 'haproxy_backend_up < 1'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}} (backend={{$labels.backend}}): HAProxy Backend Down"
+

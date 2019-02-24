@@ -1,0 +1,25 @@
+[Unit]
+Description=Prometheus exporter for machine metrics
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+MemoryLimit=200M
+Restart=on-failure
+RestartSec=6s
+EnvironmentFile=-/etc/conf.d/prometheus-node-exporter
+ExecStart=/usr/bin/prometheus-node-exporter \
+<%- node[:prometheus][:node_exporter].fetch(:collectors).each do |c| -%>
+  --collector.<%= c %> \
+<%- end -%>
+  --collector.textfile.directory /var/lib/prometheus-node-exporter/textfile_collector
+ExecReload=/bin/kill -HUP $MAINPID
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+
+
+[Install]
+WantedBy=multi-user.target

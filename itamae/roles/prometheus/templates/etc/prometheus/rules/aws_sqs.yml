@@ -1,0 +1,9 @@
+groups:
+  - name: sqs_age
+    rules:
+      - alert: AwsSqsOldestMessageAge60
+        expr: 'aws_sqs_approximate_age_of_oldest_message_minimum offset 6m > 60'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.queue_name}}: SQS oldest message age > 1m ({{$value}})"

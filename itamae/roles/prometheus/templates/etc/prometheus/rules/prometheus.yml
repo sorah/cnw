@@ -1,0 +1,11 @@
+groups:
+  - name: prometheus_config
+    rules:
+      - alert: PrometheusConfigLoadFailure
+        expr: 'prometheus_config_last_reload_successful < 1'
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: {{$labels.name}} prometheus config load is failing"
+

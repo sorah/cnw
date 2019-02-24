@@ -1,0 +1,158 @@
+groups:
+  - name: node_nproc
+    rules:
+      - record: instance:node_cpus:count
+        expr: count(node_cpu_seconds_total{mode="idle"}) without (cpu,mode)
+
+  - name: node_down
+    rules:
+      - alert: Down
+        expr: 'up{downalert!="ignore"} == 0'
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}} (job={{$labels.job}}): Down"
+
+  - name: node_memory
+    rules:
+      - alert: NodeMemoryUsed80
+        expr: '(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.8'
+        for: 5m
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: Memory Usage > 80% ({{$value}})"
+      - alert: NodeMemoryUsed90
+        expr: '(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9'
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: Memory Usage > 90% ({{$value}})"
+  - name: node_load
+    rules:
+      - alert: NodeLoadOverThreads
+        expr: '(node_load1 / instance:node_cpus:count) > 1'
+        for: 5m
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: Load Average per core > 1 ({{$value}})"
+      - alert: NodeLoadOverThreads2
+        expr: '(node_load1 / instance:node_cpus:count) > 1.7'
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: Load Average per core > 1.7 ({{$value}})"
+  - name: node_iowait
+    rules:
+      - alert: NodeIowait10
+        for: 5m
+        expr: '(avg by(instance,mode) (irate(node_cpu_seconds_total{mode="iowait"}[1m]))) > 0.1'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: iowait per core > 10% ({{$value}})"
+      - alert: NodeIowait40
+        for: 5m
+        expr: '(avg by(instance,mode) (irate(node_cpu_seconds_total{mode="iowait"}[1m]))) > 0.4'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: iowait per core > 40% ({{$value}})"
+  - name: node_steal
+    rules:
+      - alert: NodeSteal10
+        for: 5m
+        expr: '(avg by(instance,mode) (irate(node_cpu_seconds_total{mode="steal"}[1m]))) > 0.1'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: steal per core > 10% ({{$value}})"
+      - alert: NodeSteal25
+        for: 5m
+        expr: '(avg by(instance,mode) (irate(node_cpu_seconds_total{mode="steal"}[1m]))) > 0.25'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: steal per core > 25% ({{$value}})"
+
+  - name: node_filesystem_ro
+    rules:
+      - alert: NodeFilesystemReadonly
+        for: 1m
+        expr: 'node_filesystem_readonly{device=~"^/dev/(xvd|sd|hd|nvme)[^/]+$"} > 0'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: filesystem {{$labels.mountpoint}} ({{$labels.device}}) READONLY"
+
+  - name: node_filesystem_usage
+    rules:
+      - record: instance:node_filesystems:usage
+        expr: '(1-(node_filesystem_avail_bytes{device=~"^/dev/(xvd|sd|hd|nvme)[^/]+$"} / node_filesystem_size_bytes{device=~"^/dev/(xvd|sd|hd|nvme)[^/]+$"}))'
+      - alert: NodeFilesystemUsage80
+        for: 5m
+        expr: 'instance:node_filesystems:usage > 0.8'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: filesystem {{$labels.mountpoint}} ({{$labels.device}}) usage > 80% ({{$value}})"
+      - alert: NodeFilesystemUsage90
+        for: 5m
+        expr: 'instance:node_filesystems:usage > 0.9'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: filesystem {{$labels.mountpoint}} ({{$labels.device}}) usage > 90% ({{$value}})"
+  - name: node_filesystem_inode_usage
+    rules:
+      - record: instance:node_filesystems:inode_usage
+        expr: '(1-(node_filesystem_files_free{device=~"^/dev/(xvd|sd|hd|nvme)[^/]+$"} / node_filesystem_files_free{device=~"^/dev/(xvd|sd|hd|nvme)[^/]+$"}))'
+      - alert: NodeFilesystemInodeUsage80
+        for: 5m
+        expr: 'instance:node_filesystems:inode_usage > 0.8'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: filesystem {{$labels.mountpoint}} ({{$labels.device}}) inode usage > 80% ({{$value}})"
+      - alert: NodeFilesystemInodeUsage90
+        for: 5m
+        expr: 'instance:node_filesystems:inode_usage > 0.9'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: filesystem {{$labels.mountpoint}} ({{$labels.device}}) inode usage > 90% ({{$value}})"
+
+
+  - name: node_ssh
+    rules:
+      - alert: NodeSshInactive
+        expr: 'node_systemd_unit_state{name="ssh.service",state="active"} < 1'
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: ssh.service is not active"
+
+  - name: node_systemd_units
+    rules:
+      - alert: NodeSystemdUnitFailures
+        expr: 'node_systemd_unit_state{state="failed"} > 0'
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.instance}}: {{$labels.name}} is in failed state"
+
+
+  - name: node_reboot
+    rules:
+      - alert: NodeReboot
+        expr: 'increase(node_boot_time_seconds[5m]) > 0'
+        labels:
+          severity: warn
+        annotations:
+          summary: "{{$labels.instance}}: Rebooted within 5m"

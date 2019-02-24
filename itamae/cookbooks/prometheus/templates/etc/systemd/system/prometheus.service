@@ -1,0 +1,26 @@
+[Unit]
+Description=Prometheus
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker run --rm --name prometheus \
+    --network=host \
+    --userns=host \
+    --user=900 \
+    --ulimit nofile=1048576 \
+    -v /etc/prometheus/prometheus.yml:/prometheus.yml \
+<%- node[:prometheus].fetch(:mounts).each do |mount| -%>
+    -v <%= mount %> \
+<%- end -%>
+    prom/prometheus:<%= node[:prometheus].fetch(:version) %> \
+    --config.file=/prometheus.yml \
+    --storage.tsdb.path=/prometheus-data \
+    --storage.tsdb.retention=20d \
+    --web.console.libraries=/etc/prometheus/console_libraries \
+    --web.console.templates=/etc/prometheus/consoles
+ExecReload=/usr/bin/docker kill -s HUP prometheus
+
+
+[Install]
+WantedBy=multi-user.target

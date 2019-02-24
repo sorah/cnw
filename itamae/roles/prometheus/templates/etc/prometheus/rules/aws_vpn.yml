@@ -1,0 +1,9 @@
+groups:
+  - name: awsvpn_state
+    rules:
+      - alert: AwsVpnTunnelDown
+        expr: 'aws_vpn_tunnel_state_minimum offset 6m < 1'
+        labels:
+          severity: page
+        annotations:
+          summary: "{{$labels.tunnel_ip_address}}: AWS VPN tunnel down"
