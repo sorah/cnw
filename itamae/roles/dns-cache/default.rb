@@ -28,8 +28,6 @@ include_role 'base'
 include_cookbook 'systemd-resolved'
 include_cookbook 'mnt-vol'
 include_cookbook 'unbound'
-#include_cookbook 'zabbix-userparameter-unbound'
-#include_cookbook 'zabbix-userparameter-autoping'
 
 if node[:use_nftables]
   include_cookbook 'nftables'

@@ -10,7 +10,7 @@ include_role 'base'
 include_cookbook 'mnt-vol'
 
 include_cookbook 'kea'
-include_cookbook 'zabbix-userparameter-kea'
+include_cookbook 'prometheus-kea-exporter'
 
 conf = {
   Dhcp4: {

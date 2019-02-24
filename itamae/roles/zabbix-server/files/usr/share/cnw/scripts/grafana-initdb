@@ -1,8 +1,0 @@
-#!/bin/bash -xe
-
-sudo -u postgres psql <<-'EOF'
-create role grafana login;
-create database grafana with owner = grafana;
-EOF
-
-touch /mnt/vol/initialized.grafana

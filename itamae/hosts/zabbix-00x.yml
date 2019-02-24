@@ -1,8 +1,0 @@
-zabbix-001.cloud.l.nw.rubykaigi.org:
-  properties:
-    attributes:
-      desired_hostname: zabbix-001
-
-    run_list:
-      - roles/base/default.rb
-      - roles/zabbix-server/default.rb

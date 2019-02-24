@@ -14,7 +14,6 @@ node[:site_admin_domain] = "s.#{node.fetch(:site_domain)}"
 node[:use_nftables] = true
 
 node[:wlc_host] = "wlc-001.venue.l.#{node.fetch(:site_domain)}"
-node[:zabbix_host] = "zabbix-001.cloud.l.#{node.fetch(:site_domain)}"
 # node[:prometheus_host] =
 node[:grafana_host] = node[:prometheus_host]
 node[:syslog_host] = "syslog-001.cloud.l.#{node.fetch(:site_domain)}"

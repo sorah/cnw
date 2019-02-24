@@ -18,10 +18,6 @@ include_cookbook 'conntrack'
 
 ##
 
-include_cookbook 'zabbix-userparameter-autoping'
-
-##
-
 include_cookbook 'nftables'
 
 template '/etc/nftables.conf' do

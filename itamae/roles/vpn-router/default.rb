@@ -32,8 +32,6 @@ include_cookbook 'rp-filter'
 include_cookbook 'linux-ecmp'
 include_cookbook 'conntrack'
 
-include_cookbook 'zabbix-userparameter-autoping'
-
 template '/etc/nftables.conf' do
   owner 'root'
   group 'wheel'

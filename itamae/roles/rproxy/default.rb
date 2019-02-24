@@ -1,6 +1,6 @@
 node.reverse_merge!(
   rproxy: {
-    site_configs: %w(default wlc zabbix grafana),
+    site_configs: %w(default wlc grafana),
     tls: true,
   }
 )
@@ -14,6 +14,7 @@ template "/etc/nginx/utils/listen_tls.conf" do
   mode  '0644'
   notifies :reload, 'service[nginx]'
 end
+
 
 node[:rproxy][:site_configs].each do |_|
   template "/etc/nginx/conf.d/#{_}.conf" do
