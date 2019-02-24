@@ -1,11 +1,19 @@
 node.reverse_merge!(
   rproxy: {
     site_configs: %w(default wlc zabbix grafana),
+    tls: true,
   }
 )
 
 include_role 'base'
 include_cookbook 'nginx'
+
+template "/etc/nginx/utils/listen_tls.conf" do
+  owner 'root'
+  group 'root'
+  mode  '0644'
+  notifies :reload, 'service[nginx]'
+end
 
 node[:rproxy][:site_configs].each do |_|
   template "/etc/nginx/conf.d/#{_}.conf" do
