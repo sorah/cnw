@@ -1,6 +1,5 @@
 node.reverse_merge!(
   nftables: {
-    config_file: node[:hostname],
   },
 )
 

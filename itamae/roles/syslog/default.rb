@@ -3,14 +3,20 @@ node.reverse_merge!(
     root: '/mnt/vol/log',
   },
   nftables: {
-    config_file: 'syslog',
   },
 )
 
+include_role 'base'
 include_cookbook 'mnt-vol'
 
 include_cookbook 'fluentd'
 include_cookbook 'nftables'
+
+template "/etc/nftables.conf" do
+  owner 'root'
+  group 'wheel'
+  mode  '0640'
+end
 
 directory node[:syslog].fetch(:root) do
   owner 'fluentd'
