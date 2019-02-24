@@ -47,6 +47,7 @@ include_cookbook 'sshd'
   jq
   git
   ruby
+  ruby-irb
   btrfs-progs
 ).each do |_|
   package _
