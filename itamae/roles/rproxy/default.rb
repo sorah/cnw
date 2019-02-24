@@ -1,6 +1,6 @@
 node.reverse_merge!(
   rproxy: {
-    site_configs: %w(default wlc grafana),
+    site_configs: %w(default wlc grafana prometheus),
     tls: true,
   }
 )
