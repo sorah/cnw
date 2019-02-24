@@ -1,12 +1,13 @@
+node.reverse_merge!(
+  rproxy: {
+    site_configs: %w(default wlc zabbix grafana),
+  }
+)
+
 include_role 'base'
 include_cookbook 'nginx'
 
-%w(
-  default
-  wlc
-  zabbix
-  grafana
-).each do |_|
+node[:rproxy][:site_configs].each do |_|
   template "/etc/nginx/conf.d/#{_}.conf" do
     owner 'root'
     group 'root'
