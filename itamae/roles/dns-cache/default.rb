@@ -1,7 +1,7 @@
 node.reverse_merge!(
   dns_cache: {
     threads: 2,
-    upstream: nil,
+    upstream: node[:upstream_dns],
     log_queries: false,
     stubs: [],
     outgoing_interfaces: %w(),
