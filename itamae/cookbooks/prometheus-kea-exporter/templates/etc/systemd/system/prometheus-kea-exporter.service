@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus Kea Exporter
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+MemoryLimit=50M
+Restart=always
+RestartSec=6s
+ExecStart=/usr/local/bin/kea-exporter /etc/kea/kea-dhcp4.conf
+
+[Install]
+WantedBy=multi-user.target
