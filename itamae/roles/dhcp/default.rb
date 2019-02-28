@@ -1,5 +1,7 @@
 node.reverse_merge!(
   kea: {
+    subnets: {
+    },
     interfaces: %w(*),
     relay_only: true,
   },
@@ -39,90 +41,62 @@ conf = {
     "renew-timer" => 5400,
     "rebind-timer" => 7200,
     subnet4: [
-      {
-        subnet: "10.25.0.0/19",
-        id: 1,
-        pools: [
-          pool: "10.25.30.0-10.25.31.250",
-        ],
-        "option-data" => [
+      *(
+        node.dig(:kea,:subnets).map do |name, _|
           {
-            name: "routers",
-            code: 3,
-            space: "dhcp4",
-            "csv-format" => true,
-            data: "10.25.0.1",
-          },
-          {
-            name: "log-servers",
-            space: "dhcp4",
-            "csv-format" => true,
-            data: "10.25.128.3",
-          },
-          {
-            name: "domain-name",
-            code: 15,
-            space: "dhcp4",
-            "csv-format" => true,
-            data: "venue.l.#{node.fetch(:site_domain)}",
+            id: _.fetch(:id),
+            subnet: _.fetch(:subnet),
+            pools: _.fetch(:pools).map{ |__| {pool: __} },
+            "option-data" => [
+              {
+                name: 'routers',
+                code: 3,
+                space: 'dhcp4',
+                "csv-format" => true,
+                data: _.fetch(:router),
+              },
+              _[:dns] && {
+                name: "domain-name-servers",
+                code: 6,
+                space: "dhcp4",
+                "csv-format" => true,
+                data: [*_.fetch(:dns)].join(','),
+              },
+              _[:domain] && {
+                name: "domain-name",
+                code: 15,
+                space: "dhcp4",
+                "csv-format" => true,
+                data: _.fetch(:domain),
+              },
+              _[:syslog] && {
+                name: "log-servers",
+                space: "dhcp4",
+                "csv-format" => true,
+                data: _.fetch(:syslog),
+              },
+            ].compact,
+            reservations: [*_[:reservations]].map do |r|
+              {
+                "hw-address" => r.fetch(:mac).downcase,
+                "ip-address" => r.fetch(:ip),
+              }.tap do |rd|
+                rd["hostname"] = (_[:domain] ? "#{r[:name]}.#{_[:domain]}" : r[:name]) if r[:name]
+              end
+            end
           }
-        ],
-        reservations: [
-          node[:hosts_data].select { |_| _[:network] == 'lan' && _[:mac] }.map { |_|
-            {
-              "hw-address" => _[:mac].downcase,
-              "ip-address" => _[:ip],
-              "hostname"   => "#{_[:name]}.venue.l.#{node.fetch(:site_domain)}",
-            }
-          }
-        ].flatten,
-      },
-      {
-        subnet: "10.25.100.0/24",
-        id: 100,
-        pools: [
-          {
-            pool: "10.25.100.50-10.25.100.250",
-          },
-        ],
-        "option-data" => [
-          {
-            name: "routers",
-            code: 3,
-            space: "dhcp4",
-            "csv-format" => true,
-            data: "10.25.100.254",
-          },
-        ],
-      },
-      {
-        subnet: "10.25.112.0/20",
-        id: 112,
-        pools: [
-          {
-            pool: "10.25.113.0-10.25.127.250",
-          },
-        ],
-        "option-data" => [
-          {
-            name: "routers",
-            code: 3,
-            space: "dhcp4",
-            "csv-format" => true,
-            data: "10.25.127.254",
-          },
-        ],
-      },
+        end
+      ),
     ],
     "option-data" => [
-      {
+      node[:kea][:dns] && {
         name: "domain-name-servers",
         code: 6,
         space: "dhcp4",
         "csv-format" => true,
-        data: "10.25.200.53,10.25.200.54", # comma separated
+        data: [*node[:kea].fetch(:dns)].join(','),
       },
-    ],
+    ].compact,
   },
   Logging: {
     loggers: [

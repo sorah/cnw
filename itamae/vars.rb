@@ -34,14 +34,6 @@ node[:default_authorized_keys] = [
   ".lines.map(&:strip).reject(&:empty?),
 ]
 
-node.reverse_merge!(
-  prometheus: {
-    alertmanager: {
-      # slack_url: 
-    }
-  }
-)
-
 host_lines = <<EOF
 mgmt	10.25.128.0/24	10.25.128.254	rt-001	ens4	
 lan	10.25.0.0/19	10.25.11.1	ap-hal-01		de:ad:be:ef:88:88
@@ -59,3 +51,25 @@ node[:network_tester] ||= [
   {host: '1.1.1.1'},
 ]
 
+node.reverse_merge!(
+  prometheus: {
+    alertmanager: {
+      # slack_url: 
+    }
+  },
+  kea: {
+    # dns: 
+    subnets: {
+      # nanika: {
+      #   id: 1,
+      #   subnet: '10.0.0.0/16',
+      #   pools: %w(10.0.0.0-10.0.255.255),
+      #   router:
+      #   domain:
+      #   reservations: {
+      #     hogehoge: {mac: '', ip: '',},
+      #   },
+      # },
+    }
+  }
+)
