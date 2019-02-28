@@ -8,7 +8,7 @@ Type=simple
 MemoryLimit=50M
 Restart=always
 RestartSec=6s
-ExecStart=/usr/local/bin/kea-exporter /etc/kea/kea-dhcp4.conf
+ExecStart=/usr/bin/kea-exporter /etc/kea/kea.conf
 
 [Install]
 WantedBy=multi-user.target
