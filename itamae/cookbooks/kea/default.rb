@@ -1,9 +1,3 @@
-execute 'import F1B11BF05CF02E57.pem' do
-  user node[:op_user_name]
-  command 'gpg -d F1B11BF05CF02E57; gpg --recv-key F1B11BF05CF02E57'
-  not_if 'gpg -l F1B11BF05CF02E57'
-end
-
 package "kea" do
 end
 
