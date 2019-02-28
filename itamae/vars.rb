@@ -18,6 +18,8 @@ node[:wlc_host] = "wlc-001.venue.l.#{node.fetch(:site_domain)}"
 node[:grafana_host] = node[:prometheus_host]
 node[:syslog_host] = "syslog-001.cloud.l.#{node.fetch(:site_domain)}"
 
+node[:snmp_community] = 'public'
+
 node[:extra_disk] = "/dev/vdb"
 
 node[:rproxy_htpasswd] = node[:secrets][:rproxy_htpasswd]
