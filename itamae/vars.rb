@@ -55,7 +55,11 @@ node.reverse_merge!(
   prometheus: {
     alertmanager: {
       # slack_url: 
-    }
+    },
+    snmp_hosts: [
+      *node.fetch(:hosts_data).select{ |_| _[:primary] }.map { |_| ["#{_.fetch(:name)}.c.#{node[:site_domain]}", %w(if_mib)] }.reject { |_| _[0].include?('dxvif') },
+      [node[:wlc_host], %w(cisco_wlc)],
+    ],
   },
   kea: {
     # dns: 
