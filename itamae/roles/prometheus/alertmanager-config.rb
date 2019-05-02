@@ -24,7 +24,7 @@ node.reverse_merge!(
               {
                 send_resolved: true,
                 api_url: node[:prometheus][:alertmanager].fetch(:slack_url),
-                channel: '#alert',
+                #channel: '#alert',
                 title_link: "https://prometheus.#{node.fetch(:site_admin_domain)}",
                 title: "{{ .CommonLabels.instance }} ({{ .CommonLabels.job }})",
                 text: "{{ range .Alerts }}*{{ .Status }}* {{ .Annotations.summary }}\n{{ end }}",
