@@ -24,7 +24,6 @@ modules:
       - interfaces
       - ifXTable
       - 1.3.6.1.4.1.14179.2.1.1.1.38   # bsnDot11EssNumberofMobileStations
-      - 1.3.6.1.4.1.14179.2.2.2.1.2    # bsnAPIfType
       - 1.3.6.1.4.1.14179.2.2.2.1.4    # bsnAPIfPhyChannelNumber
       - 1.3.6.1.4.1.14179.2.2.2.1.6    # power level
       - 1.3.6.1.4.1.14179.2.2.2.1.3 # bsnAPIfPhyChannelAssignment
@@ -40,7 +39,12 @@ modules:
       - source_indexes: [bsnAPDot3MacAddress]
         lookup: bsnAPName
         drop_source_indexes: true
+      - source_indexes: [bsnAPDot3MacAddress, bsnAPIfSlotId]
+        lookup: bsnAPIfType
+        drop_source_indexes: false
     overrides:
+      bsnAPIfType:
+        type: EnumAsInfo
       ifType:
         type: EnumAsInfo
       bsnAPName:
