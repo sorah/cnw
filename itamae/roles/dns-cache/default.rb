@@ -11,6 +11,7 @@ node.reverse_merge!(
       mgmt: 'ens4',
       client: %w(ens4 ens5),
     },
+    use_nftables: node[:use_nftables],
   },
   nftables: {
     config_file: false,
@@ -29,13 +30,17 @@ include_cookbook 'systemd-resolved'
 include_cookbook 'mnt-vol'
 include_cookbook 'unbound'
 
-if node[:use_nftables]
+if node[:dns_cache][:use_nftables]
   include_cookbook 'nftables'
   template '/etc/nftables.conf' do
     owner 'root'
     group 'wheel'
     mode  '0640'
     notifies :run, 'execute[nft -f /etc/nftables.conf]'
+  end
+else
+  file '/etc/nftables.conf' do
+    action :delete
   end
 end
 
