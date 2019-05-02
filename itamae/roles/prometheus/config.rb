@@ -98,6 +98,25 @@ if node[:prometheus][:snmp_hosts]
   )
 end
 
+if node[:prometheus][:snmp_lo_hosts]
+  scrape_configs.push(
+    job_name: :snmp_lo,
+    metrics_path: "/snmp",
+    scrape_timeout: '59s',
+    scrape_interval: '60s',
+    static_configs: node[:prometheus][:snmp_lo_hosts].map do |host, mod|
+      [*mod].map do |m|
+        {targets: [host], labels: {__param_module: m} }
+      end
+    end.flatten,
+    relabel_configs: [
+      {source_labels: %w(__address__), target_label: '__param_target'},
+      {source_labels: %w(__param_target), target_label: 'instance'},
+      {target_label: '__address__', replacement: '127.0.0.1:9116'},
+    ],
+  )
+end
+
 
 host_jobs = [
   {
