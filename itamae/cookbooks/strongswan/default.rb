@@ -1,1 +1,1 @@
-yaourt 'strongswan'
+package 'strongswan'
