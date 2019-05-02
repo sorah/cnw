@@ -8,7 +8,7 @@ directory '/mnt/vol/alertmanager' do
   mode  '0755'
 end
 
-file "/etc/prometheus/alertmanager.yml" do
+file "/etc/alertmanager/alertmanager.yml" do
   content "#{node[:prometheus][:alertmanager].fetch(:config).to_json}\n"
   owner 'root'
   group 'root'
