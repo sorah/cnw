@@ -5,13 +5,13 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.4.2"
+      "version": "6.1.2"
     },
     {
       "type": "panel",
       "id": "graph",
       "name": "Graph",
-      "version": "5.0.0"
+      "version": ""
     }
   ],
   "annotations": {
@@ -31,7 +31,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1551821063947,
+  "iteration": 1556013045152,
   "links": [],
   "panels": [
     {
@@ -70,10 +70,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(bsnAPName) (bsnApIfNoOfUsers{bsnAPIfSlotId=\"1\",bsnAPName=~\".*-$location-.*\"})",
+          "expr": "bsnApIfNoOfUsers{bsnAPIfType=\"2\",bsnAPName=~\".*-($location)-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{bsnAPName}} 5GHz Assocs",
+          "legendFormat": "{{bsnAPName}}.{{bsnAPIfSlotId}}",
           "refId": "A"
         }
       ],
@@ -124,7 +124,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
@@ -155,10 +155,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(bsnAPName) (bsnApIfNoOfUsers{bsnAPIfSlotId=\"0\",bsnAPName=~\".*-$location-.*\"})",
+          "expr": "bsnApIfNoOfUsers{bsnAPIfType=\"1\",bsnAPName=~\".*-($location)-.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{bsnAPName}} 2.4GHz Assocs",
+          "legendFormat": "{{bsnAPName}}.{{bsnAPIfSlotId}}",
           "refId": "A"
         }
       ],
@@ -240,10 +240,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "bsnAPIfLoadChannelUtilization{bsnAPName=~\".*-$location-.*\",bsnAPIfSlotId=\"1\"}",
+          "expr": "bsnAPIfLoadChannelUtilization{bsnAPName=~\".*-($location)-.*\",bsnAPIfSlotId=\"1\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{bsnAPName}} {{bsnAPIfSlotId}}",
+          "legendFormat": "{{bsnAPName}} {{bsnAPIfType}}.{{bsnAPIfSlotId}}",
           "refId": "A"
         }
       ],
@@ -270,8 +270,8 @@
           "format": "short",
           "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
+          "max": "100",
+          "min": "0",
           "show": true
         },
         {
@@ -324,11 +324,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bsnAPIfPhyChannelNumber{bsnAPName=~\"^.*-$location-.*$\"}",
+          "expr": "bsnAPIfPhyChannelNumber{bsnAPName=~\"^.*-($location)-.*$\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{bsnAPName}} {{bsnAPIfSlotId}}",
+          "legendFormat": "{{bsnAPName}} {{bsnAPIfType}}.{{bsnAPIfSlotId}}",
           "refId": "A"
         }
       ],
@@ -409,11 +409,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "bsnAPIfPhyTxPowerLevel{bsnAPName=~\"^.*-$location-.*$\"}",
+          "expr": "bsnAPIfPhyTxPowerLevel{bsnAPName=~\"^.*-($location)-.*$\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{bsnAPName}} {{bsnAPIfSlotId}}",
+          "legendFormat": "{{bsnAPName}} {{bsnAPIfType}}.{{bsnAPIfSlotId}}",
           "refId": "A"
         }
       ],
@@ -465,7 +465,7 @@
       "dashes": false,
       "fill": 1,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 12,
         "y": 18
@@ -485,18 +485,34 @@
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
+      "targets": [
+        {
+          "expr": "irate(ifInOctets{instance=~\"^es-($location)-.+$\",ifAlias=\"upstream\"}[1m]) *8",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} {{ifDescr}} In",
+          "refId": "A"
+        },
+        {
+          "expr": "irate(ifOutOctets{instance=~\"^es-($location)-.+$\",ifAlias=\"upstream\"}[1m]) *8",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} {{ifDescr}} Out",
+          "refId": "B"
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Panel Title",
+      "title": "bandwidth",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -512,7 +528,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -534,7 +550,8 @@
       }
     }
   ],
-  "schemaVersion": 16,
+  "refresh": false,
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -542,8 +559,12 @@
       {
         "allValue": null,
         "current": {
-          "text": "hal",
-          "value": "hal"
+          "tags": [],
+          "text": "bck + rbc",
+          "value": [
+            "bck",
+            "rbc"
+          ]
         },
         "hide": 0,
         "includeAll": false,
@@ -552,30 +573,80 @@
         "name": "location",
         "options": [
           {
+            "selected": false,
+            "text": "haa",
+            "value": "haa"
+          },
+          {
+            "selected": false,
+            "text": "hab",
+            "value": "hab"
+          },
+          {
+            "selected": false,
+            "text": "hac",
+            "value": "hac"
+          },
+          {
+            "selected": false,
+            "text": "had",
+            "value": "had"
+          },
+          {
+            "selected": false,
+            "text": "lb1",
+            "value": "lb1"
+          },
+          {
+            "selected": false,
+            "text": "lb2",
+            "value": "lb2"
+          },
+          {
+            "selected": false,
+            "text": "lb3",
+            "value": "lb3"
+          },
+          {
+            "selected": false,
+            "text": "lb4",
+            "value": "lb4"
+          },
+          {
+            "selected": false,
+            "text": "lb5",
+            "value": "lb5"
+          },
+          {
+            "selected": false,
+            "text": "ex2",
+            "value": "ex2"
+          },
+          {
+            "selected": false,
+            "text": "gya",
+            "value": "gya"
+          },
+          {
             "selected": true,
-            "text": "hal",
-            "value": "hal"
-          },
-          {
-            "selected": false,
-            "text": "lby",
-            "value": "lby"
-          },
-          {
-            "selected": false,
             "text": "bck",
             "value": "bck"
+          },
+          {
+            "selected": true,
+            "text": "rbc",
+            "value": "rbc"
           }
         ],
-        "query": "hal,lby,bck",
+        "query": "haa,hab,hac,had,lb1,lb2,lb3,lb4,lb5,ex2,gya,bck,rbc",
         "skipUrlSync": false,
         "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
-    "to": "now"
+    "from": "2019-04-16T23:00:00.000Z",
+    "to": "2019-04-20T12:00:00.000Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -605,5 +676,5 @@
   "timezone": "",
   "title": "cnw location",
   "uid": "K47GiQrmz",
-  "version": 14
+  "version": 15
 }
