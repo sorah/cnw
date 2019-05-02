@@ -23,6 +23,8 @@ node.reverse_merge!(
   },
 )
 
+include_role 'base'
+
 include_cookbook 'nftables'
 include_cookbook 'strongswan'
 include_cookbook 'iproute2'
