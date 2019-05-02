@@ -1,6 +1,2 @@
 node[:desired_hostname] = node.dig(:hocho_ec2, :tags, :Name)
-
-node[:roles] = (node.dig(:hocho_ec2, :tags, :Role) || 'base').split(',')
-node[:roles].each do |_|
-  include_role _
-end
+node[:self_router] = node.fetch(:hocho_subnet).fetch(:cidr_block).sub(%r{\.(\d+)/\d+$}) { ".#{$1.to_i.succ.to_s}" }
