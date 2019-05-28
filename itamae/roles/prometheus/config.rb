@@ -174,7 +174,7 @@ if node[:hocho_ec2]
         },
         {
           source_labels: ["__meta_ec2_tag_Name"],
-          regex: "^.+$",
+          regex: "^(.+)$",
           target_label: "instance",
         },
         {
