@@ -169,7 +169,12 @@ if node[:hocho_ec2]
           action: "keep",
         } : nil,
         {
+          source_labels: ["__meta_ec2_instance_id"],
+          target_label: "instance",
+        },
+        {
           source_labels: ["__meta_ec2_tag_Name"],
+          regex: "^.+$",
           target_label: "instance",
         },
         {
