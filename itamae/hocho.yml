@@ -18,13 +18,13 @@ property_providers:
         preferred_driver: mitamae
         alternate_ssh_options:
           port: 22
-          user: root
+          user: arch
 initializers:
   - site.rb
 driver_options:
   mitamae:
     mitamae_outdate_check_script: |
-      [ -x /usr/bin/mitamae ] && [ "_$(mitamae version)" != "_MItamae v1.7.2" ]
+      [ -x /usr/bin/mitamae ] && [ "_$(mitamae version)" != "_mitamae v1.11.7" ]
     mitamae_prepare_script:
       - |
         set -x

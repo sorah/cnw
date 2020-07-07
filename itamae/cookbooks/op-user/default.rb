@@ -1,7 +1,7 @@
 node.reverse_merge!(
   op_user: {
     name: node.fetch(:op_user_name),
-    uid: 1000,
+    uid: 1329,
     authorized_keys: [],
     include_default_authorized_keys: true,
   },
